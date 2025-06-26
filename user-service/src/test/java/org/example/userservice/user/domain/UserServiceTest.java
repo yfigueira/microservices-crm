@@ -58,4 +58,9 @@ class UserServiceTest {
                 .hasMessage("User not found :: %s".formatted(unknownId));
 
     }
+
+    @Test
+    void ciPipelineTest() {
+        assertThat(2 + 2, is(equalTo(4)));
+    }
 }
