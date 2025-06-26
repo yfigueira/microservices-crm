@@ -25,7 +25,7 @@ jobs:
 
       - name: Compile project
         run: |
-          cd comment-service
+          cd user-service
           mvn clean compile
 
   unit-test:
@@ -45,5 +45,5 @@ jobs:
 
       - name: Run unit tests
         run: |
-          cd comment-service
+          cd user-service
           mvn clean test
