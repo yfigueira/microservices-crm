@@ -1,0 +1,69 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user-service
+          uri: lb:http://USER-SERVICE
+          predicates:
+            - Path=/api/users/**
+
+        - id: activity-service
+          uri: lb:http://ACTIVITY-SERVICE
+          predicates:
+              - Path=/api/activities/**
+
+        - id: account-service
+          uri: lb:http://ACCOUNT-SERVICE
+          predicates:
+            - Path=/api/accounts/**
+
+        - id: lead-service
+          uri: lb:http://LEAD-SERVICE
+          predicates:
+            - Path=/api/leads/**
+
+        - id: deal-service
+          uri: lb:http://DEAL-SERVICE
+          predicates:
+            - Path=/api/deals/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_SERVICE_URL}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - name: gateway
+        url: /v3/api-docs
+
+      - name: user-service
+        url: /api/users/v3/api-docs
+
+      - name: activity-service
+        url: /api/activities/v3/api-docs
+
+      - name: account-service
+        url: /api/accounts/v3/api-docs
+
+      - name: lead-service
+        url: /api/leads/v3/api-docs
+
+      - name: deal-service
+        url: /api/deals/v3/api-docs
+
+server:
+  port: 8222
+
+app:
+  cors:
+    allowed-origins: http://localhost:4200,http://localhost:8222

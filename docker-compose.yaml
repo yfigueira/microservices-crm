@@ -1,0 +1,295 @@
+services:
+  microservices-crm-db:
+    container_name: microservices-crm-db
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USERS_AND_DATABASES: lead,account,deal,activity,stat
+      POSTGRES_USER_PASSWORDS: leadsecret,accountsecret,dealsecret,activitysecret,statsecret
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./docs/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      - microservices-crm-data:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - microservices-crm-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  microservices-crm-auth-server:
+    container_name: microservices-crm-auth-server
+    image: quay.io/keycloak/keycloak:26.0.0
+    ports:
+      - "9000:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: secret
+    volumes:
+      - ./docs/crm-realm.json:/opt/keycloak/data/import/crm-realm.json
+    command:
+      - "start-dev"
+      - "--import-realm"
+    networks:
+      - microservices-crm-net
+
+
+  microservices-crm-message-broker:
+    container_name: microservices-crm-message-broker
+    image: apache/kafka-native:4.0.0
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://microservices-crm-message-broker:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@microservices-crm-message-broker:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - microservices-crm-net
+
+
+  microservices-crm-config-server:
+    container_name: microservices-crm-config-server
+    build:
+      context: ./config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      microservices-crm-auth-server:
+        condition: service_started
+    networks:
+      - microservices-crm-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  microservices-crm-discovery-service:
+    container_name: microservices-crm-discovery-service
+    build:
+      context: ./discovery-service
+    environment:
+      CONFIG_SERVER_URL: http://microservices-crm-config-server:8888
+    ports:
+      - "8761:8761"
+    depends_on:
+      microservices-crm-config-server:
+        condition: service_healthy
+    networks:
+      - microservices-crm-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  microservices-crm-user-service:
+    container_name: microservices-crm-user-service
+    build:
+      context: ./user-service
+    environment:
+      CONFIG_SERVER_URL: http://microservices-crm-config-server:8888
+      DISCOVERY_SERVICE_URL: http://microservices-crm-discovery-service:8761/eureka
+      DISCOVERY_SERVICE_NAME: microservices-crm-user-service
+      AUTH_SERVER_URL: http://microservices-crm-auth-server:8080
+      AUTH_SERVER_REALM: crm-realm
+      AUTH_SERVER_API_CLIENT_ID: crm-api-client
+      AUTH_SERVER_API_CLIENT_SECRET: u9Ukq7VL4SXCyStfGjdY9RJHSOpvYDRB
+    ports:
+      - "8081:8081"
+    depends_on:
+      microservices-crm-config-server:
+        condition: service_healthy
+      microservices-crm-discovery-service:
+        condition: service_healthy
+      microservices-crm-auth-server:
+        condition: service_started
+    networks:
+      - microservices-crm-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  microservices-crm-activity-service:
+    container_name: microservices-crm-activity-service
+    build:
+      context: ./activity-service
+    environment:
+      CONFIG_SERVER_URL: http://microservices-crm-config-server:8888
+      DISCOVERY_SERVICE_URL: http://microservices-crm-discovery-service:8761/eureka
+      DATABASE_URL: jdbc:postgresql://microservices-crm-db:5432
+      DATABASE_NAME: activity
+      DATABASE_PASSWORD: activitysecret
+    ports:
+      - "8082:8082"
+    depends_on:
+      microservices-crm-user-service:
+        condition: service_healthy
+      microservices-crm-db:
+        condition: service_healthy
+      microservices-crm-message-broker:
+        condition: service_started
+    networks:
+      - microservices-crm-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/api/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  microservices-crm-account-service:
+    container_name: microservices-crm-account-service
+    build:
+      context: ./account-service
+    environment:
+      CONFIG_SERVER_URL: http://microservices-crm-config-server:8888
+      DISCOVERY_SERVICE_URL: http://microservices-crm-discovery-service:8761/eureka
+      DATABASE_URL: jdbc:postgresql://microservices-crm-db:5432
+      DATABASE_NAME: account
+      DATABASE_PASSWORD: accountsecret
+    ports:
+      - "8083:8083"
+    depends_on:
+      microservices-crm-activity-service:
+        condition: service_healthy
+      microservices-crm-db:
+        condition: service_healthy
+      microservices-crm-message-broker:
+        condition: service_started
+    networks:
+      - microservices-crm-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8083/api/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  microservices-crm-lead-service:
+    container_name: microservices-crm-lead-service
+    build:
+      context: ./lead-service
+    environment:
+      CONFIG_SERVER_URL: http://microservices-crm-config-server:8888
+      DISCOVERY_SERVICE_URL: http://microservices-crm-discovery-service:8761/eureka
+      DATABASE_URL: jdbc:postgresql://microservices-crm-db:5432
+      DATABASE_NAME: lead
+      DATABASE_PASSWORD: leadsecret
+    ports:
+      - "8084:8084"
+    depends_on:
+      microservices-crm-user-service:
+        condition: service_healthy
+      microservices-crm-activity-service:
+        condition: service_healthy
+      microservices-crm-db:
+        condition: service_healthy
+      microservices-crm-message-broker:
+        condition: service_started
+    networks:
+      - microservices-crm-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8084/api/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  microservices-crm-deal-service:
+    container_name: microservices-crm-deal-service
+    build:
+      context: ./deal-service
+    environment:
+      CONFIG_SERVER_URL: http://microservices-crm-config-server:8888
+      DISCOVERY_SERVICE_URL: http://microservices-crm-discovery-service:8761/eureka
+      DATABASE_URL: jdbc:postgresql://microservices-crm-db:5432
+      DATABASE_NAME: deal
+      DATABASE_PASSWORD: dealsecret
+    ports:
+      - "8085:8085"
+    depends_on:
+      microservices-crm-user-service:
+        condition: service_healthy
+      microservices-crm-activity-service:
+        condition: service_healthy
+      microservices-crm-account-service:
+        condition: service_healthy
+      microservices-crm-db:
+        condition: service_healthy
+      microservices-crm-message-broker:
+        condition: service_started
+    networks:
+      - microservices-crm-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8085/api/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  microservices-crm-api-gateway:
+    container_name: microservices-crm-api-gateway
+    build:
+      context: ./gateway
+    environment:
+      CONFIG_SERVER_URL: http://microservices-crm-config-server:8888
+      AUTH_SERVER_URL: http://microservices-crm-auth-server:8080
+      DISCOVERY_SERVICE_URL: http://microservices-crm-discovery-service:8761/eureka
+      DISCOVERY_SERVICE_NAME: microservices-crm-api-gateway
+    ports:
+      - "8222:8222"
+    depends_on:
+      microservices-crm-user-service:
+        condition: service_healthy
+      microservices-crm-activity-service:
+        condition: service_healthy
+      microservices-crm-account-service:
+        condition: service_healthy
+      microservices-crm-lead-service:
+        condition: service_healthy
+      microservices-crm-deal-service:
+        condition: service_healthy
+
+    networks:
+      - microservices-crm-net
+
+
+  microservices-crm-ux:
+    container_name: microservices-crm-ux
+    build:
+      context: ./ux
+    ports:
+      - "4200:80"
+    depends_on:
+      microservices-crm-api-gateway:
+        condition: service_started
+    networks:
+      - microservices-crm-net
+
+
+networks:
+  microservices-crm-net:
+    driver: bridge
+
+volumes:
+  microservices-crm-data:

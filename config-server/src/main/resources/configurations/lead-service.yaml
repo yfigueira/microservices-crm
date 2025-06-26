@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}/${DATABASE_NAME}
+    username: ${DATABASE_NAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_SERVICE_URL}
+
+server:
+  port: 8084
+  servlet:
+    context-path: /api
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/leads/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /api/leads/swagger-ui.html
