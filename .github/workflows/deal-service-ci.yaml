@@ -1,0 +1,49 @@
+name: Deal Service Continuous Integration Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - deal-service/**
+
+jobs:
+  compile:
+    name: Compile Deal Service
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Compile source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'corretto'
+
+      - name: Compile project
+        run: |
+          cd deal-service
+          mvn clean compile
+
+  unit-test:
+    name: Run unit tests
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'corretto'
+
+      - name: Run unit tests
+        run: |
+          cd deal-service
+          mvn clean test
