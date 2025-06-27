@@ -19,7 +19,7 @@ services:
       test: ["CMD-SHELL", "pg_isready -U admin"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
   microservices-crm-auth-server:
@@ -76,7 +76,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
   microservices-crm-discovery-service:
@@ -96,7 +96,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
   microservices-crm-user-service:
@@ -123,10 +123,10 @@ services:
     networks:
       - microservices-crm-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/api/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/users/actuator/health"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
   microservices-crm-activity-service:
@@ -151,10 +151,10 @@ services:
     networks:
       - microservices-crm-net
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8082/api/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/api/activities/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
   microservices-crm-account-service:
@@ -179,10 +179,10 @@ services:
     networks:
       - microservices-crm-net
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8083/api/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8083/api/accounts/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
   microservices-crm-lead-service:
@@ -209,10 +209,10 @@ services:
     networks:
       - microservices-crm-net
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8084/api/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8084/api/leads/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
   microservices-crm-deal-service:
@@ -241,10 +241,10 @@ services:
     networks:
       - microservices-crm-net
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8085/api/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8085/api/deals/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
 
   microservices-crm-api-gateway:
