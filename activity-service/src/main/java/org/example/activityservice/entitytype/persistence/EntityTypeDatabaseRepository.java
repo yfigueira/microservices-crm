@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class EntityTypeDatabaseRepository implements EntityTypeRepository {
+class EntityTypeDatabaseRepository implements EntityTypeRepository {
 
     private final EntityTypeMapper mapper;
     private final EntityTypeJpaRepository jpaRepository;

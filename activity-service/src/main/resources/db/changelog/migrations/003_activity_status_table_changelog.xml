@@ -5,29 +5,25 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="1" author="yfp">
-        <createTable tableName="entity_type">
+        <createTable tableName="activity_status">
             <column name="id" type="int">
                 <constraints primaryKey="true" />
             </column>
-            <column name="type" type="varchar(20)">
+            <column name="status" type="varchar(20)">
                 <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>
-    
+
     <changeSet id="2" author="yfp">
-        <insert tableName="entity_type">
+        <insert tableName="activity_status">
             <column name="id" value="1" />
-            <column name="type" value="Lead" />
+            <column name="status" value="Open" />
         </insert>
-        <insert tableName="entity_type">
+        <insert tableName="activity_status">
             <column name="id" value="2" />
-            <column name="type" value="Contact" />
-        </insert>
-        <insert tableName="entity_type">
-            <column name="id" value="3" />
-            <column name="type" value="Deal" />
+            <column name="status" value="Done" />
         </insert>
     </changeSet>
-    
+
 </databaseChangeLog>

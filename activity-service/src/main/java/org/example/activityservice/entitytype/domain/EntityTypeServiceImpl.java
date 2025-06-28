@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EntityTypeServiceImpl implements EntityTypeService {
+class EntityTypeServiceImpl implements EntityTypeService {
 
     private final EntityTypeRepository repository;
 
