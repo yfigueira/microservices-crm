@@ -48,7 +48,7 @@ public class UserRestClient implements UserClient {
 
             var resource = restClient.get()
                     .uri(userUrl)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.accessToken())
                     .retrieve()
                     .onStatus(
                             HttpStatusCode::is4xxClientError,
