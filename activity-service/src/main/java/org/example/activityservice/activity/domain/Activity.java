@@ -1,6 +1,7 @@
 package org.example.activityservice.activity.domain;
 
 import lombok.Builder;
+import lombok.With;
 import org.example.activityservice.activitystatus.domain.ActivityStatus;
 import org.example.activityservice.activitytype.domain.ActivityType;
 import org.example.activityservice.entitytype.domain.EntityType;
@@ -16,11 +17,11 @@ public record Activity(
         String description,
         LocalDateTime scheduledAt,
         LocalDateTime completedAt,
-        ActivityType type,
-        ActivityStatus status,
+        @With ActivityType type,
+        @With ActivityStatus status,
         UUID entity,
-        EntityType entityType,
-        User owner,
+        @With EntityType entityType,
+        @With User owner,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {

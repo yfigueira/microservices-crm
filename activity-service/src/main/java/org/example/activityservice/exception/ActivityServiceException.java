@@ -11,6 +11,10 @@ public class ActivityServiceException extends RuntimeException {
         return new ResourceNotFoundException("%s not found :: %s".formatted(clazz.getSimpleName(), id));
     }
 
+    public static ResourceNotFoundException notFound(Class<?> clazz, int id) {
+        return new ResourceNotFoundException("%s not found :: %s".formatted(clazz.getSimpleName(), id));
+    }
+
     public static class ResourceNotFoundException extends RuntimeException {
         public ResourceNotFoundException(String message) {
             super(message);

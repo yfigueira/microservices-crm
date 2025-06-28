@@ -5,4 +5,6 @@ import java.util.List;
 public interface ActivityTypeService {
 
     List<ActivityType> getAll();
+
+    ActivityType getById(int id);
 }

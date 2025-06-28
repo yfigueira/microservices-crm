@@ -6,6 +6,7 @@ import org.example.activityservice.activitytype.domain.ActivityTypeRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,5 +20,11 @@ class ActivityTypeDatabaseRepository implements ActivityTypeRepository {
         return jpaRepository.findAll().stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<ActivityType> findById(int id) {
+        return jpaRepository.findById(id)
+                .map(mapper::toDomain);
     }
 }

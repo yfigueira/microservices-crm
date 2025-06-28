@@ -1,6 +1,7 @@
 package org.example.activityservice.activitytype.domain;
 
 import lombok.RequiredArgsConstructor;
+import org.example.activityservice.exception.ActivityServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,5 +15,11 @@ class ActivityTypeServiceImpl implements ActivityTypeService {
     @Override
     public List<ActivityType> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public ActivityType getById(int id) {
+        return repository.findById(id)
+                .orElseThrow(() -> ActivityServiceException.notFound(ActivityType.class, id));
     }
 }

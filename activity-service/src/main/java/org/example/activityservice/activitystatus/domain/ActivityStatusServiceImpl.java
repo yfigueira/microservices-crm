@@ -1,6 +1,7 @@
 package org.example.activityservice.activitystatus.domain;
 
 import lombok.RequiredArgsConstructor;
+import org.example.activityservice.exception.ActivityServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,5 +15,11 @@ class ActivityStatusServiceImpl implements ActivityStatusService {
     @Override
     public List<ActivityStatus> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public ActivityStatus getById(int id) {
+        return repository.findById(id)
+                .orElseThrow(() -> ActivityServiceException.notFound(ActivityStatus.class, id));
     }
 }
