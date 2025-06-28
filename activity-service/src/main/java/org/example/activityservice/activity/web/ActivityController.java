@@ -1,6 +1,7 @@
 package org.example.activityservice.activity.web;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.activityservice.activity.domain.ActivityService;
 import org.example.activityservice.activity.web.dto.ActivityDto;
@@ -18,7 +19,7 @@ public class ActivityController {
     private final ActivityService service;
 
     @PostMapping
-    public ActivityDto create(@RequestBody ActivityDto request) {
+    public ActivityDto create(@RequestBody @Valid ActivityDto request) {
         var newActivity = ActivityDto.mapper().toDomain(request);
         var createdActivity = service.create(newActivity);
         return ActivityDto.mapper().toDto(createdActivity);

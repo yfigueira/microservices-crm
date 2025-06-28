@@ -1,5 +1,7 @@
 package org.example.activityservice.activity.web.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import org.example.activityservice.activity.domain.Activity;
 import org.example.activityservice.activitystatus.domain.ActivityStatus;
@@ -16,14 +18,19 @@ import java.util.UUID;
 @Builder
 public record ActivityDto(
         UUID id,
+        @NotBlank(message = "Subject required")
         String subject,
         String description,
         LocalDateTime scheduledAt,
         LocalDateTime completedAt,
+        @NotNull(message = "Activity type required")
         ActivityType type,
         ActivityStatus status,
+        @NotNull(message = "Entity required")
         UUID entity,
+        @NotNull(message = "Entity type required")
         EntityType entityType,
+        @NotNull(message = "Owner required")
         User owner
 ) {
     @Mapper
