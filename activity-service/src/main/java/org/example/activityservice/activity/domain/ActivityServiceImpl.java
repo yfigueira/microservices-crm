@@ -24,7 +24,8 @@ class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Activity create(Activity activity) {
-        var created = repository.save(activity);
+        var scheduledActivity = ActivityScheduler.plan(activity);
+        var created = repository.save(scheduledActivity);
         return fetchDetails(created);
     }
 

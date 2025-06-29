@@ -15,7 +15,7 @@ public record Activity(
         UUID id,
         String subject,
         String description,
-        LocalDateTime scheduledAt,
+        @With LocalDateTime scheduledAt,
         LocalDateTime completedAt,
         @With ActivityType type,
         @With ActivityStatus status,
