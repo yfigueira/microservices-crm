@@ -3,6 +3,7 @@ package org.example.activityservice.activity.persistence;
 import lombok.RequiredArgsConstructor;
 import org.example.activityservice.activity.domain.Activity;
 import org.example.activityservice.activity.domain.ActivityRepository;
+import org.example.activityservice.exception.ActivityServiceException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,5 +35,22 @@ class ActivityDatabaseRepository implements ActivityRepository {
         return jpaRepository.findAll().stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Activity update(UUID id, Activity activity) {
+        return jpaRepository.findById(id)
+                .map(entity -> mapper.updateEntity(activity, entity))
+                .map(jpaRepository::save)
+                .map(mapper::toDomain)
+                .orElseThrow(() -> ActivityServiceException.notFound(Activity.class, id));
+    }
+
+    @Override
+    public void delete(UUID id) {
+        var entity = jpaRepository.findById(id)
+                .orElseThrow(() -> ActivityServiceException.notFound(Activity.class, id));
+
+        jpaRepository.delete(entity);
     }
 }

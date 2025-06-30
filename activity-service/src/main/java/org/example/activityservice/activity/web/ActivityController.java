@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.activityservice.activity.domain.ActivityService;
 import org.example.activityservice.activity.web.dto.ActivityDto;
 import org.example.activityservice.activity.web.dto.ActivitySummary;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,5 +37,21 @@ public class ActivityController {
         return service.getAll().stream()
                 .map(ActivitySummary.mapper()::toDto)
                 .toList();
+    }
+
+    @PutMapping("{id}")
+    public ActivityDto update(
+            @PathVariable UUID id,
+            @RequestBody @Valid ActivityDto dto
+    ) {
+        var activity = ActivityDto.mapper().toDomain(dto);
+        var updatedActivity = service.update(id, activity);
+        return ActivityDto.mapper().toDto(updatedActivity);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

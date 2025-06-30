@@ -6,7 +6,9 @@ import org.example.activityservice.activitytype.domain.ActivityType;
 import org.example.activityservice.entitytype.domain.EntityType;
 import org.example.activityservice.user.domain.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 import java.util.UUID;
 
@@ -17,11 +19,15 @@ interface ActivityMapper {
 
     ActivityEntity toEntity(Activity domain);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    ActivityEntity updateEntity(Activity domain, @MappingTarget ActivityEntity entity);
+
     default ActivityStatus mapActivityStatus(Integer id) {
         return ActivityStatus.builder().id(id).build();
     }
 
-    default int mapActivityStatus(ActivityStatus status) {
+    default Integer mapActivityStatus(ActivityStatus status) {
         return status.id();
     }
 
@@ -29,7 +35,7 @@ interface ActivityMapper {
         return ActivityType.builder().id(id).build();
     }
 
-    default int mapActivityType(ActivityType activityType) {
+    default Integer mapActivityType(ActivityType activityType) {
         return activityType.id();
     }
 
@@ -37,7 +43,7 @@ interface ActivityMapper {
         return EntityType.builder().id(id).build();
     }
 
-    default int mapEntityType(EntityType entityType) {
+    default Integer mapEntityType(EntityType entityType) {
         return entityType.id();
     }
 

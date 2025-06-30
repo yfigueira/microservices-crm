@@ -43,6 +43,20 @@ class ActivityServiceImpl implements ActivityService {
                 .toList();
     }
 
+    @Override
+    public Activity update(UUID id, Activity activity) {
+        if (!activity.id().equals(id)) {
+            throw ActivityServiceException.actionNotAllowed(Activity.class, "id mismatch");
+        }
+        var updated = repository.update(id, activity);
+        return fetchDetails(updated);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        repository.delete(id);
+    }
+
     private Activity fetchDetails(Activity activity) {
         return Optional.of(activity)
                 .map(this::fetchOwner)
