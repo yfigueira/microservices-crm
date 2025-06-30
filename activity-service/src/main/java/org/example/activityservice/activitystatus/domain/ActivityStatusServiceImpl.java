@@ -18,7 +18,7 @@ class ActivityStatusServiceImpl implements ActivityStatusService {
     }
 
     @Override
-    public ActivityStatus getById(int id) {
+    public ActivityStatus getById(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> ActivityServiceException.notFound(ActivityStatus.class, id));
     }

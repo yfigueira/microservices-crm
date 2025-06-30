@@ -7,5 +7,5 @@ public interface ActivityStatusRepository {
 
     List<ActivityStatus> findAll();
 
-    Optional<ActivityStatus> findById(int id);
+    Optional<ActivityStatus> findById(Integer id);
 }

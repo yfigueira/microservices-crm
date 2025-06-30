@@ -18,7 +18,7 @@ class ActivityTypeServiceImpl implements ActivityTypeService {
     }
 
     @Override
-    public ActivityType getById(int id) {
+    public ActivityType getById(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> ActivityServiceException.notFound(ActivityType.class, id));
     }

@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 @Builder
 public record ActivityTypeDto(
-        int id,
+        Integer id,
         String type
 ) {
     @Mapper

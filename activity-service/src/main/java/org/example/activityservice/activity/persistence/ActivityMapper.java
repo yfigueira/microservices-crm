@@ -17,7 +17,7 @@ interface ActivityMapper {
 
     ActivityEntity toEntity(Activity domain);
 
-    default ActivityStatus mapActivityStatus(int id) {
+    default ActivityStatus mapActivityStatus(Integer id) {
         return ActivityStatus.builder().id(id).build();
     }
 
@@ -25,7 +25,7 @@ interface ActivityMapper {
         return status.id();
     }
 
-    default ActivityType mapActivityType(int id) {
+    default ActivityType mapActivityType(Integer id) {
         return ActivityType.builder().id(id).build();
     }
 
@@ -33,7 +33,7 @@ interface ActivityMapper {
         return activityType.id();
     }
 
-    default EntityType mapEntityType(int id) {
+    default EntityType mapEntityType(Integer id) {
         return EntityType.builder().id(id).build();
     }
 

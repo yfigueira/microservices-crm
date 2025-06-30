@@ -25,7 +25,7 @@ public class ActivityEntity {
 
     @Version
     @Column(name = "version")
-    private long version;
+    private Long version;
 
     @Column(name = "subject")
     private String subject;
@@ -40,16 +40,16 @@ public class ActivityEntity {
     private LocalDateTime completedAt;
 
     @Column(name = "type")
-    private int type;
+    private Integer type;
 
     @Column(name = "status")
-    private int status;
+    private Integer status;
 
     @Column(name = "entity")
     private UUID entity;
 
     @Column(name = "entity_type")
-    private int entityType;
+    private Integer entityType;
 
     @Column(name = "owner")
     private UUID owner;

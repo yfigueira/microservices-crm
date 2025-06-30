@@ -23,7 +23,7 @@ class ActivityStatusDatabaseRepository implements ActivityStatusRepository {
     }
 
     @Override
-    public Optional<ActivityStatus> findById(int id) {
+    public Optional<ActivityStatus> findById(Integer id) {
         return jpaRepository.findById(id)
                 .map(mapper::toDomain);
     }

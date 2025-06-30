@@ -6,5 +6,5 @@ public interface ActivityStatusService {
 
     List<ActivityStatus> getAll();
 
-    ActivityStatus getById(int id);
+    ActivityStatus getById(Integer id);
 }

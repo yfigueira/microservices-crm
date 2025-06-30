@@ -19,7 +19,7 @@ public class ActivityStatusEntity {
 
     @Id
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "status")
     private String status;

@@ -6,5 +6,5 @@ public interface EntityTypeService {
 
     List<EntityType> getAll();
 
-    EntityType getById(int id);
+    EntityType getById(Integer id);
 }

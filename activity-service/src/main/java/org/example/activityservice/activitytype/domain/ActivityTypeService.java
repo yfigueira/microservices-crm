@@ -6,5 +6,5 @@ public interface ActivityTypeService {
 
     List<ActivityType> getAll();
 
-    ActivityType getById(int id);
+    ActivityType getById(Integer id);
 }

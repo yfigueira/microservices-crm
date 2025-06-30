@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ActivityType(
-        int id,
+        Integer id,
         String type
 ) {
 }

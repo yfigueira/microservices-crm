@@ -23,7 +23,7 @@ class ActivityTypeDatabaseRepository implements ActivityTypeRepository {
     }
 
     @Override
-    public Optional<ActivityType> findById(int id) {
+    public Optional<ActivityType> findById(Integer id) {
         return jpaRepository.findById(id)
                 .map(mapper::toDomain);
     }

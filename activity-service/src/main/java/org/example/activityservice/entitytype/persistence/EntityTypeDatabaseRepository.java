@@ -23,7 +23,7 @@ class EntityTypeDatabaseRepository implements EntityTypeRepository {
     }
 
     @Override
-    public Optional<EntityType> findById(int id) {
+    public Optional<EntityType> findById(Integer id) {
         return jpaRepository.findById(id)
                 .map(mapper::toDomain);
     }

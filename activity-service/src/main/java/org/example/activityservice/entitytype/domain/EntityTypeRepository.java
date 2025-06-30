@@ -7,5 +7,5 @@ public interface EntityTypeRepository {
 
     List<EntityType> findAll();
 
-    Optional<EntityType> findById(int id);
+    Optional<EntityType> findById(Integer id);
 }

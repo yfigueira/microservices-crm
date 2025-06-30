@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ActivityStatus(
-        int id,
+        Integer id,
         String status
 ) {
 }

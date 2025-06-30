@@ -7,5 +7,5 @@ public interface ActivityTypeRepository {
 
     List<ActivityType> findAll();
 
-    Optional<ActivityType> findById(int id);
+    Optional<ActivityType> findById(Integer id);
 }

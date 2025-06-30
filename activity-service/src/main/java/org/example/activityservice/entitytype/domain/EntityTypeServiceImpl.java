@@ -18,7 +18,7 @@ class EntityTypeServiceImpl implements EntityTypeService {
     }
 
     @Override
-    public EntityType getById(int id) {
+    public EntityType getById(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> ActivityServiceException.notFound(EntityType.class, id));
     }
