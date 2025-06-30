@@ -45,4 +45,16 @@ public class ActivityServiceExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(exceptionResponse);
     }
+
+    @ExceptionHandler(ActivityServiceException.ActionNotAllowedException.class)
+    public ResponseEntity<ExceptionResponse> handleActionNotAllowedException(ActivityServiceException.ActionNotAllowedException ex) {
+        var exceptionResponse = ExceptionResponse.builder()
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(exceptionResponse);
+    }
 }
