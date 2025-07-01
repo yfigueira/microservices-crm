@@ -57,6 +57,13 @@ class ActivityServiceImpl implements ActivityService {
         repository.delete(id);
     }
 
+    @Override
+    public List<Activity> getByEntity(UUID entityId) {
+        return repository.findByEntity(entityId).stream()
+                .map(this::fetchDetails)
+                .toList();
+    }
+
     private Activity fetchDetails(Activity activity) {
         return Optional.of(activity)
                 .map(this::fetchOwner)

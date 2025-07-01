@@ -54,4 +54,11 @@ public class ActivityController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/entity/{id}")
+    public List<ActivitySummary> getByEntity(@PathVariable UUID id) {
+        return service.getByEntity(id).stream()
+                .map(ActivitySummary.mapper()::toDto)
+                .toList();
+    }
 }
