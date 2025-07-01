@@ -16,7 +16,7 @@ public class ActivityServiceException extends RuntimeException {
     }
 
     public static ActionNotAllowedException actionNotAllowed(Class<?> clazz, String reason) {
-        return new ActionNotAllowedException("Action on %s not allowed :: %s".formatted(clazz, reason));
+        return new ActionNotAllowedException("Action on %s not allowed :: %s".formatted(clazz.getSimpleName(), reason));
     }
 
     public static class ResourceNotFoundException extends RuntimeException {
