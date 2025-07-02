@@ -5,6 +5,8 @@ import org.example.accountservice.jobtitle.domain.JobTitle;
 import org.example.accountservice.jobtitle.domain.JobTitleRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 class JobTitleDatabaseRepository implements JobTitleRepository {
@@ -17,6 +19,13 @@ class JobTitleDatabaseRepository implements JobTitleRepository {
         var entity = mapper.toEntity(jobTitle);
         var createdEntity = jpaRepository.save(entity);
         return mapper.toDomain(createdEntity);
+    }
+
+    @Override
+    public List<JobTitle> getAll() {
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 
     @Override

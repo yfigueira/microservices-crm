@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.accountservice.exception.AccountServiceException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 class JobTitleServiceImpl implements JobTitleService {
@@ -16,5 +18,10 @@ class JobTitleServiceImpl implements JobTitleService {
             throw AccountServiceException.alreadyExists(JobTitle.class, jobTitle.name());
         }
         return repository.create(jobTitle);
+    }
+
+    @Override
+    public List<JobTitle> getAll() {
+        return repository.getAll();
     }
 }
