@@ -1,5 +1,6 @@
 package org.example.accountservice.jobtitle.web;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import org.example.accountservice.common.web.DtoMapper;
 import org.example.accountservice.jobtitle.domain.JobTitle;
@@ -11,8 +12,9 @@ import java.util.UUID;
 @Builder
 public record JobTitleDto(
         UUID id,
+        @NotBlank(message = "Name required")
         String name
-) {
+        ) {
     @Mapper
     public interface JobTitleDtoMapper extends DtoMapper<JobTitle, JobTitleDto> {}
 

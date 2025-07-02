@@ -1,5 +1,6 @@
 package org.example.accountservice.jobtitle.web;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.accountservice.jobtitle.domain.JobTitleService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class JobTitleController {
     private final JobTitleService service;
 
     @PostMapping
-    public JobTitleDto create(@RequestBody JobTitleDto dto) {
+    public JobTitleDto create(@RequestBody @Valid JobTitleDto dto) {
         var jobTitle = JobTitleDto.mapper().toDomain(dto);
         var created = service.create(jobTitle);
         return JobTitleDto.mapper().toDto(created);

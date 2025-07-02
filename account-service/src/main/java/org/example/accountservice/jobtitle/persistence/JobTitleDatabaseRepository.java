@@ -18,4 +18,9 @@ class JobTitleDatabaseRepository implements JobTitleRepository {
         var createdEntity = jpaRepository.save(entity);
         return mapper.toDomain(createdEntity);
     }
+
+    @Override
+    public Boolean existsByName(String name) {
+        return jpaRepository.existsByName(name);
+    }
 }
