@@ -5,9 +5,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.accountservice.account.domain.AccountService;
 import org.example.accountservice.account.web.dto.AccountDto;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.accountservice.account.web.dto.AccountSummary;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,5 +23,18 @@ public class AccountController {
         var account = AccountDto.mapper().toDomain(dto);
         var created = service.create(account);
         return AccountDto.mapper().toDto(created);
+    }
+
+    @GetMapping
+    public List<AccountSummary> getAll() {
+        return service.getAll().stream()
+                .map(AccountSummary.mapper()::toDto)
+                .toList();
+    }
+
+    @GetMapping("{id}")
+    public AccountDto getById(@PathVariable UUID id) {
+        var account = service.getById(id);
+        return AccountDto.mapper().toDto(account);
     }
 }

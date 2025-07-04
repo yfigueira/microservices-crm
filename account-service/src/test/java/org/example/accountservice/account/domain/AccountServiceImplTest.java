@@ -1,5 +1,7 @@
 package org.example.accountservice.account.domain;
 
+import org.example.accountservice.contact.domain.Contact;
+import org.example.accountservice.contact.domain.ContactService;
 import org.example.accountservice.exception.AccountServiceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,6 +24,9 @@ class AccountServiceImplTest {
 
     @Mock
     AccountRepository repository;
+
+    @Mock
+    ContactService contactService;
 
     @InjectMocks
     AccountServiceImpl SUT;
@@ -58,5 +65,43 @@ class AccountServiceImplTest {
 
         // then
         assertThat(result, is(equalTo(createdAccount)));
+    }
+
+    @Test
+    void whenNotFound_ShouldThrowAccountServiceExceptionNotFound() {
+        // given
+        var unknownId = UUID.randomUUID();
+        Mockito.when(repository.findById(unknownId)).thenReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(() -> SUT.getById(unknownId))
+                .isInstanceOf(AccountServiceException.ResourceNotFoundException.class)
+                .hasMessage("Account not found :: %s".formatted(unknownId));
+    }
+
+    @Test
+    void whenFound_ShouldReturnAccountWithContacts() {
+        // given
+        var accountId = UUID.randomUUID();
+        var contacts = List.of(
+                Contact.builder().id(UUID.randomUUID()).firstName("John").lastName("Smith").build(),
+                Contact.builder().id(UUID.randomUUID()).firstName("Jane").lastName("Doe").build()
+        );
+        var account = Account.builder()
+                .id(accountId)
+                .name("Company")
+                .country("Country")
+                .city("City")
+                .tin("0000000000")
+                .build();
+
+        Mockito.when(contactService.getByCompany(accountId)).thenReturn(contacts);
+        Mockito.when(repository.findById(accountId)).thenReturn(Optional.of(account));
+
+        // when
+        var result = SUT.getById(accountId);
+
+        // then
+        assertThat(result, is(equalTo(account.withContacts(contacts))));
     }
 }

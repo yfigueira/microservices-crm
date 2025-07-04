@@ -1,6 +1,7 @@
 package org.example.accountservice.account.domain;
 
 import lombok.Builder;
+import lombok.With;
 import org.example.accountservice.contact.domain.Contact;
 
 import java.util.List;
@@ -17,6 +18,6 @@ public record Account(
         String zipCode,
         String tin,
         String webUrl,
-        List<Contact> contacts
+        @With List<Contact> contacts
 ) {
 }

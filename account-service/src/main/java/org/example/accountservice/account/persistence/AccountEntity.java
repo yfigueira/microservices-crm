@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -34,22 +35,27 @@ public class AccountEntity {
     private String country;
 
     @Column(name = "city")
-    String city;
+    private String city;
 
     @Column(name = "street")
-    String street;
+    private String street;
 
     @Column(name = "street_number")
-    String streetNumber;
+    private String streetNumber;
 
     @Column(name = "zip_code")
-    String zipCode;
+    private String zipCode;
 
     @Column(name = "tin")
-    String tin;
+    private String tin;
 
     @Column(name = "web_url")
-    String webUrl;
+    private String webUrl;
+
+    @ElementCollection
+    @CollectionTable(name = "contact", joinColumns = @JoinColumn(name = "company"))
+    @Column(name = "id")
+    private List<UUID> contacts;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
