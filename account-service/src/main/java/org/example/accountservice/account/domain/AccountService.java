@@ -10,4 +10,8 @@ public interface AccountService {
     List<Account> getAll();
 
     Account getById(UUID id);
+
+    Account update(UUID id, Account account);
+
+    void delete(UUID id);
 }

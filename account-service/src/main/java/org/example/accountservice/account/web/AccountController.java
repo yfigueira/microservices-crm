@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.accountservice.account.domain.AccountService;
 import org.example.accountservice.account.web.dto.AccountDto;
 import org.example.accountservice.account.web.dto.AccountSummary;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,5 +37,21 @@ public class AccountController {
     public AccountDto getById(@PathVariable UUID id) {
         var account = service.getById(id);
         return AccountDto.mapper().toDto(account);
+    }
+
+    @PutMapping("{id}")
+    public AccountDto update(
+            @PathVariable UUID id,
+            @RequestBody @Valid AccountDto dto
+    ) {
+        var account = AccountDto.mapper().toDomain(dto);
+        var updated = service.update(id, account);
+        return AccountDto.mapper().toDto(updated);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
