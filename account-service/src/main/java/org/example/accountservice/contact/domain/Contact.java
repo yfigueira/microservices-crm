@@ -1,6 +1,7 @@
 package org.example.accountservice.contact.domain;
 
 import lombok.Builder;
+import lombok.With;
 import org.example.accountservice.account.domain.Account;
 import org.example.accountservice.jobtitle.domain.JobTitle;
 
@@ -13,7 +14,7 @@ public record Contact(
         String lastName,
         String email,
         ContactPriority priority,
-        Account company,
+        @With Account company,
         JobTitle jobTitle,
         String phoneNumber,
         String privateEmail,

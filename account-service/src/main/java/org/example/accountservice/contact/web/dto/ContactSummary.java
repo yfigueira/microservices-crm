@@ -1,4 +1,4 @@
-package org.example.accountservice.contact.web;
+package org.example.accountservice.contact.web.dto;
 
 import lombok.Builder;
 import org.example.accountservice.common.web.DtoMapper;

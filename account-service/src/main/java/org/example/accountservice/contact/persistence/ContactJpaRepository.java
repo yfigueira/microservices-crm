@@ -13,4 +13,11 @@ interface ContactJpaRepository extends JpaRepository<ContactEntity, UUID> {
             WHERE c.company = :companyId
             """)
     List<ContactEntity> findByCompany(UUID companyId);
+
+    @Query("""
+            SELECT CASE WHEN EXISTS
+                (SELECT 1 FROM ContactEntity c WHERE c.email = :email)
+            THEN true ELSE false END
+            """)
+    Boolean existsByEmail(String email);
 }

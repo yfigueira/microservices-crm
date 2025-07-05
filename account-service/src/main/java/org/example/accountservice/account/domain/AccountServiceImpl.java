@@ -1,6 +1,7 @@
 package org.example.accountservice.account.domain;
 
 import lombok.RequiredArgsConstructor;
+import org.example.accountservice.contact.domain.Contact;
 import org.example.accountservice.contact.domain.ContactService;
 import org.example.accountservice.exception.AccountServiceException;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,12 @@ class AccountServiceImpl implements AccountService {
     @Override
     public void delete(UUID id) {
         repository.delete(id);
+    }
+
+    @Override
+    public Contact addContact(UUID accountId, Contact contact) {
+        var account = getById(accountId);
+        return contactService.create(contact.withCompany(account));
     }
 
     private Account fetchContacts(Account account) {

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.accountservice.account.domain.AccountService;
 import org.example.accountservice.account.web.dto.AccountDto;
 import org.example.accountservice.account.web.dto.AccountSummary;
+import org.example.accountservice.contact.web.dto.ContactDto;
+import org.example.accountservice.contact.web.dto.ContactSummary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,5 +55,15 @@ public class AccountController {
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("{id}/contacts")
+    public ContactSummary addContact(
+            @PathVariable("id") UUID accountId,
+            @RequestBody @Valid ContactDto contactDto
+    ) {
+        var contact = ContactDto.mapper().toDomain(contactDto);
+        var addedContact = service.addContact(accountId, contact);
+        return ContactSummary.mapper().toDto(addedContact);
     }
 }

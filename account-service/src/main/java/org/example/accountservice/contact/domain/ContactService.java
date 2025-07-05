@@ -5,5 +5,7 @@ import java.util.UUID;
 
 public interface ContactService {
 
+    Contact create(Contact contact);
+
     List<Contact> getByCompany(UUID companyId);
 }

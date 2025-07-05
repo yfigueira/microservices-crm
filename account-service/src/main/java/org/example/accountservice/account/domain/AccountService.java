@@ -1,5 +1,7 @@
 package org.example.accountservice.account.domain;
 
+import org.example.accountservice.contact.domain.Contact;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -14,4 +16,6 @@ public interface AccountService {
     Account update(UUID id, Account account);
 
     void delete(UUID id);
+
+    Contact addContact(UUID accountId, Contact contact);
 }

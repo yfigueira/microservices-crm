@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import org.example.accountservice.account.domain.Account;
 import org.example.accountservice.common.web.DtoMapper;
-import org.example.accountservice.contact.web.ContactSummary;
+import org.example.accountservice.contact.web.dto.ContactSummary;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
