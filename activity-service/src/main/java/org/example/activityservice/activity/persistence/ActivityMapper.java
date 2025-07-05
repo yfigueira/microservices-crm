@@ -1,15 +1,16 @@
 package org.example.activityservice.activity.persistence;
 
 import org.example.activityservice.activity.domain.Activity;
-import org.example.activityservice.activitystatus.domain.ActivityStatus;
-import org.example.activityservice.activitytype.domain.ActivityType;
-import org.example.activityservice.entitytype.domain.EntityType;
+import org.example.activityservice.activity.domain.ActivityStatus;
+import org.example.activityservice.activity.domain.ActivityType;
+import org.example.activityservice.activity.domain.EntityType;
 import org.example.activityservice.user.domain.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
@@ -23,35 +24,44 @@ interface ActivityMapper {
     @Mapping(target = "version", ignore = true)
     ActivityEntity updateEntity(Activity domain, @MappingTarget ActivityEntity entity);
 
-    default ActivityStatus mapActivityStatus(Integer id) {
-        return ActivityStatus.builder().id(id).build();
+    default ActivityStatus mapActivityStatus(Integer entity) {
+        return Arrays.stream(ActivityStatus.values())
+                .filter(v -> v.getCode().equals(entity))
+                .findFirst()
+                .orElse(ActivityStatus.NOT_AVAILABLE);
     }
 
-    default Integer mapActivityStatus(ActivityStatus status) {
-        return status.id();
+    default Integer mapActivityStatus(ActivityStatus domain) {
+        return domain.getCode();
     }
 
-    default ActivityType mapActivityType(Integer id) {
-        return ActivityType.builder().id(id).build();
+    default ActivityType mapActivityType(Integer entity) {
+        return Arrays.stream(ActivityType.values())
+                .filter(v -> v.getCode().equals(entity))
+                .findFirst()
+                .orElse(ActivityType.NOT_AVAILABLE);
     }
 
-    default Integer mapActivityType(ActivityType activityType) {
-        return activityType.id();
+    default Integer mapActivityType(ActivityType domain) {
+        return domain.getCode();
     }
 
-    default EntityType mapEntityType(Integer id) {
-        return EntityType.builder().id(id).build();
+    default EntityType mapEntityType(Integer entity) {
+        return Arrays.stream(EntityType.values())
+                .filter(v -> v.getCode().equals(entity))
+                .findFirst()
+                .orElse(EntityType.NOT_AVAILABLE);
     }
 
-    default Integer mapEntityType(EntityType entityType) {
-        return entityType.id();
+    default Integer mapEntityType(EntityType domain) {
+        return domain.getCode();
     }
 
-    default User mapOwner(UUID id) {
-        return User.builder().id(id).build();
+    default User mapOwner(UUID entity) {
+        return User.builder().id(entity).build();
     }
 
-    default UUID mapOwner(User user) {
-        return user.id();
+    default UUID mapOwner(User domain) {
+        return domain.id();
     }
 }
