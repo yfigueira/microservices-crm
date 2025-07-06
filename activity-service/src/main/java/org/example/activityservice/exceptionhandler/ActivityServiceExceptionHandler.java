@@ -15,7 +15,7 @@ import java.util.Set;
 public class ActivityServiceExceptionHandler {
 
     @ExceptionHandler(ActivityServiceException.ResourceNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleUserServiceException(ActivityServiceException.ResourceNotFoundException ex) {
+    public ResponseEntity<ExceptionResponse> handleNotFoundException(ActivityServiceException.ResourceNotFoundException ex) {
         var exceptionResponse = ExceptionResponse.builder()
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
