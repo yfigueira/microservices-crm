@@ -26,6 +26,18 @@ public class AccountServiceExceptionHandler {
                 .body(exceptionResponse);
     }
 
+    @ExceptionHandler(AccountServiceException.ResourceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundException(AccountServiceException.ResourceNotFoundException ex) {
+        var exceptionResponse = ExceptionResponse.builder()
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exceptionResponse);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidArgumentException(MethodArgumentNotValidException ex) {
         Set<String> errors = new HashSet<>();
