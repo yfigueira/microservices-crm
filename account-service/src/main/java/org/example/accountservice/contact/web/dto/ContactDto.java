@@ -3,6 +3,7 @@ package org.example.accountservice.contact.web.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
+import org.example.accountservice.account.domain.Account;
 import org.example.accountservice.activity.web.ActivityDto;
 import org.example.accountservice.common.web.DtoMapper;
 import org.example.accountservice.contact.domain.Contact;
@@ -24,6 +25,7 @@ public record ContactDto(
         @Email(message = "Email format not valid")
         String email,
         Integer priority,
+        UUID company,
         JobTitleDto jobTitle,
         String phoneNumber,
         String privateEmail,
@@ -31,7 +33,16 @@ public record ContactDto(
         List<ActivityDto> activities
 ) {
     @Mapper
-    public interface ContactDtoMapper extends DtoMapper<Contact, ContactDto> {}
+    public interface ContactDtoMapper extends DtoMapper<Contact, ContactDto> {
+
+        default Account mapAccount(UUID entity) {
+            return Account.builder().id(entity).build();
+        }
+
+        default UUID mapAccount(Account domain) {
+            return domain.id();
+        }
+    }
 
     public static ContactDtoMapper mapper() {
         return Mappers.getMapper(ContactDtoMapper.class);
