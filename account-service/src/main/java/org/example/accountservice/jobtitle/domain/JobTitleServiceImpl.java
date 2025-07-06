@@ -5,6 +5,7 @@ import org.example.accountservice.exception.AccountServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +24,11 @@ class JobTitleServiceImpl implements JobTitleService {
     @Override
     public List<JobTitle> getAll() {
         return repository.getAll();
+    }
+
+    @Override
+    public JobTitle getById(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> AccountServiceException.notFound(JobTitle.class, id));
     }
 }

@@ -3,8 +3,10 @@ package org.example.accountservice.contact.domain;
 import lombok.Builder;
 import lombok.With;
 import org.example.accountservice.account.domain.Account;
+import org.example.accountservice.activity.domain.Activity;
 import org.example.accountservice.jobtitle.domain.JobTitle;
 
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -15,9 +17,10 @@ public record Contact(
         String email,
         ContactPriority priority,
         @With Account company,
-        JobTitle jobTitle,
+        @With JobTitle jobTitle,
         String phoneNumber,
         String privateEmail,
-        String privatePhoneNumber
+        String privatePhoneNumber,
+        @With List<Activity> activities
 ) {
 }

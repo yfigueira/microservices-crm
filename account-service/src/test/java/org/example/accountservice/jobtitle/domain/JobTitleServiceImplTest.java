@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -60,5 +61,17 @@ class JobTitleServiceImplTest {
 
         // then
         assertThat(result, is(equalTo(createdJobTitle)));
+    }
+
+    @Test
+    void whenNotFound_ShouldThrowAccountServiceExceptionNotFound() {
+        // given
+        var unknownId = UUID.randomUUID();
+        Mockito.when(repository.findById(unknownId)).thenReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(() -> SUT.getById(unknownId))
+                .isInstanceOf(AccountServiceException.ResourceNotFoundException.class)
+                .hasMessage("JobTitle not found :: %s".formatted(unknownId));
     }
 }

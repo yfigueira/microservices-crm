@@ -1,6 +1,10 @@
 package org.example.accountservice.contact.domain;
 
+import org.example.accountservice.activity.domain.Activity;
+import org.example.accountservice.activity.domain.ActivityService;
 import org.example.accountservice.exception.AccountServiceException;
+import org.example.accountservice.jobtitle.domain.JobTitle;
+import org.example.accountservice.jobtitle.domain.JobTitleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -8,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,6 +27,12 @@ class ContactServiceImplTest {
 
     @Mock
     ContactRepository repository;
+
+    @Mock
+    ActivityService activityService;
+
+    @Mock
+    JobTitleService jobTitleService;
 
     @InjectMocks
     ContactServiceImpl SUT;
@@ -59,5 +71,54 @@ class ContactServiceImplTest {
 
         // then
         assertThat(result, is(equalTo(createdContact)));
+    }
+
+    @Test
+    void whenNotFound_ShouldThrowAccountServiceExceptionNotFound() {
+        // given
+        var unknownId = UUID.randomUUID();
+        Mockito.when(repository.findById(unknownId)).thenReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(() -> SUT.getById(unknownId))
+                .isInstanceOf(AccountServiceException.ResourceNotFoundException.class)
+                .hasMessage("Contact not found :: %s".formatted(unknownId));
+    }
+
+    @Test
+    void whenFound_ShouldReturnContactWithActivitiesAndJobTitle() {
+        // given
+        var activities = List.of(
+                Activity.builder().subject("Activity 1").build(),
+                Activity.builder().subject("Activity 2").build()
+        );
+
+        var jobTitleId = UUID.randomUUID();
+        var jobTitle = JobTitle.builder()
+                .id(jobTitleId)
+                .name("Job title")
+                .build();
+
+        var contactId = UUID.randomUUID();
+        var contact = Contact.builder()
+                .id(contactId)
+                .firstName("John")
+                .lastName("Smith")
+                .email("test@email.com")
+                .jobTitle(JobTitle.builder().id(jobTitleId).build())
+                .build();
+
+        Mockito.when(activityService.getByContact(contactId)).thenReturn(activities);
+        Mockito.when(jobTitleService.getById(jobTitleId)).thenReturn(jobTitle);
+        Mockito.when(repository.findById(contactId)).thenReturn(Optional.of(contact));
+
+        // when
+        var result = SUT.getById(contactId);
+
+        // then
+        assertThat(result,
+                is(equalTo(contact
+                        .withActivities(activities)
+                        .withJobTitle(jobTitle))));
     }
 }

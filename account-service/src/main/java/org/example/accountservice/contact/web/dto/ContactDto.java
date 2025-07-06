@@ -3,12 +3,14 @@ package org.example.accountservice.contact.web.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
+import org.example.accountservice.activity.web.ActivityDto;
 import org.example.accountservice.common.web.DtoMapper;
 import org.example.accountservice.contact.domain.Contact;
 import org.example.accountservice.jobtitle.web.JobTitleDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -25,7 +27,8 @@ public record ContactDto(
         JobTitleDto jobTitle,
         String phoneNumber,
         String privateEmail,
-        String privatePhoneNumber
+        String privatePhoneNumber,
+        List<ActivityDto> activities
 ) {
     @Mapper
     public interface ContactDtoMapper extends DtoMapper<Contact, ContactDto> {}
