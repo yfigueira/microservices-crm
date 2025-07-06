@@ -5,7 +5,9 @@ import org.example.accountservice.contact.domain.Contact;
 import org.example.accountservice.contact.domain.ContactPriority;
 import org.example.accountservice.jobtitle.domain.JobTitle;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -16,6 +18,10 @@ interface ContactMapper {
     Contact toDomain(ContactEntity entity);
 
     ContactEntity toEntity(Contact contact);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    ContactEntity updateEntity(Contact contact, @MappingTarget ContactEntity entity);
 
     default ContactPriority mapContactPriority(Integer entity) {
         return Arrays.stream(ContactPriority.values())

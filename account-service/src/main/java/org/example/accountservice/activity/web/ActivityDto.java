@@ -13,8 +13,8 @@ public record ActivityDto(
         UUID id,
         String subject,
         LocalDateTime scheduledAt,
-        Integer activityType,
-        Integer activityStatus,
+        Integer type,
+        Integer Status,
         Integer entityType
 ) {
     @Mapper
