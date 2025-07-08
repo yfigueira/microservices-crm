@@ -1,6 +1,13 @@
 package org.example.leadservice.lead.domain;
 
+import org.example.leadservice.activity.domain.Activity;
+import org.example.leadservice.activity.domain.ActivityService;
+import org.example.leadservice.company.domain.Company;
+import org.example.leadservice.company.domain.CompanyService;
 import org.example.leadservice.exception.LeadServiceException;
+import org.example.leadservice.jobtitle.domain.JobTitleService;
+import org.example.leadservice.user.domain.User;
+import org.example.leadservice.user.domain.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -8,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -59,5 +67,17 @@ class LeadServiceImplTest {
 
         // then
         assertThat(result, is(equalTo(createdLead)));
+    }
+
+    @Test
+    void whenNotFound_ShouldThrowLeadServiceExceptionNotFound() {
+        // given
+        var unknownId = UUID.randomUUID();
+        Mockito.when(repository.findById(unknownId)).thenReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(() -> SUT.getById(unknownId))
+                .isInstanceOf(LeadServiceException.ResourceNotFoundException.class)
+                .hasMessage("Lead not found :: %s".formatted(unknownId));
     }
 }

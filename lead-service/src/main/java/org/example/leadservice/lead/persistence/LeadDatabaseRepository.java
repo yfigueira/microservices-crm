@@ -5,6 +5,10 @@ import org.example.leadservice.lead.domain.Lead;
 import org.example.leadservice.lead.domain.LeadRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Repository
 @RequiredArgsConstructor
 class LeadDatabaseRepository implements LeadRepository {
@@ -17,6 +21,19 @@ class LeadDatabaseRepository implements LeadRepository {
         var entity = mapper.toEntity(lead);
         var created = jpaRepository.save(entity);
         return mapper.toDomain(created);
+    }
+
+    @Override
+    public Optional<Lead> findById(UUID id) {
+        return jpaRepository.findById(id)
+                .map(mapper::toDomain);
+    }
+
+    @Override
+    public List<Lead> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 
     @Override

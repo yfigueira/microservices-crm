@@ -1,6 +1,7 @@
 package org.example.leadservice.lead.domain;
 
 import lombok.Builder;
+import lombok.With;
 import org.example.leadservice.activity.domain.Activity;
 import org.example.leadservice.company.domain.Company;
 import org.example.leadservice.jobtitle.domain.JobTitle;
@@ -20,9 +21,9 @@ public record Lead(
         String city,
         LeadState state,
         Boolean isActive,
-        User owner,
-        JobTitle jobTitle,
-        Company company,
-        List<Activity> activities
+        @With User owner,
+        @With JobTitle jobTitle,
+        @With Company company,
+        @With List<Activity> activities
 ) {
 }

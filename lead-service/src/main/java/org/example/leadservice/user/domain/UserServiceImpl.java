@@ -9,8 +9,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class UserServiceImpl implements UserService {
 
+    private final UserClient client;
+
     @Override
     public User getOwner(UUID id) {
-        return null;
+        return client.getOwner(id).orElse(User.fallback());
     }
 }

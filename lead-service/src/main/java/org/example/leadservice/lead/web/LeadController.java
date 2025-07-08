@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.leadservice.lead.domain.LeadService;
 import org.example.leadservice.lead.web.dto.LeadDto;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.leadservice.lead.web.dto.LeadSummary;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +21,18 @@ public class LeadController {
         var lead = LeadDto.mapper().toDomain(dto);
         var created = service.create(lead);
         return LeadDto.mapper().toDto(created);
+    }
+
+    @GetMapping("{id}")
+    public LeadDto getById(@PathVariable UUID id) {
+        var lead = service.getById(id);
+        return LeadDto.mapper().toDto(lead);
+    }
+
+    @GetMapping
+    public List<LeadSummary> getAll() {
+        return service.getAll().stream()
+                .map(LeadSummary.mapper()::toDto)
+                .toList();
     }
 }
