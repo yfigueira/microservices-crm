@@ -57,4 +57,16 @@ public class LeadServiceExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(exceptionResponse);
     }
+
+    @ExceptionHandler(LeadServiceException.ActionNotAllowedException.class)
+    public ResponseEntity<ExceptionResponse> handleActionNotAllowedException(LeadServiceException.ActionNotAllowedException ex) {
+        var exceptionResponse = ExceptionResponse.builder()
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(exceptionResponse);
+    }
 }

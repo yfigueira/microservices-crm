@@ -1,13 +1,6 @@
 package org.example.leadservice.lead.domain;
 
-import org.example.leadservice.activity.domain.Activity;
-import org.example.leadservice.activity.domain.ActivityService;
-import org.example.leadservice.company.domain.Company;
-import org.example.leadservice.company.domain.CompanyService;
 import org.example.leadservice.exception.LeadServiceException;
-import org.example.leadservice.jobtitle.domain.JobTitleService;
-import org.example.leadservice.user.domain.User;
-import org.example.leadservice.user.domain.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -79,5 +72,20 @@ class LeadServiceImplTest {
         assertThatThrownBy(() -> SUT.getById(unknownId))
                 .isInstanceOf(LeadServiceException.ResourceNotFoundException.class)
                 .hasMessage("Lead not found :: %s".formatted(unknownId));
+    }
+
+    @Test
+    void whenIdMismatchOnUpdate_ShouldThrowLeadServiceExceptionActionNotAllowed() {
+        // given
+        var argumentId = UUID.randomUUID();
+        var leadId = UUID.randomUUID();
+        var lead = Lead.builder()
+                .id(leadId)
+                .build();
+
+        // when, then
+        assertThatThrownBy(() -> SUT.update(argumentId, lead))
+                .isInstanceOf(LeadServiceException.ActionNotAllowedException.class)
+                .hasMessage("Action on Lead not allowed :: id mismatch");
     }
 }

@@ -5,8 +5,7 @@ import org.example.leadservice.jobtitle.domain.JobTitle;
 import org.example.leadservice.lead.domain.Lead;
 import org.example.leadservice.lead.domain.LeadState;
 import org.example.leadservice.user.domain.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.*;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -17,6 +16,11 @@ interface LeadMapper {
     Lead toDomain(LeadEntity entity);
 
     LeadEntity toEntity(Lead domain);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    LeadEntity updateEntity(Lead lead, @MappingTarget LeadEntity entity);
 
     default User mapOwner(UUID entity) {
         return User.builder().id(entity).build();
