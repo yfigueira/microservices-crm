@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.With;
 import org.example.accountservice.account.domain.Account;
 import org.example.accountservice.activity.domain.Activity;
-import org.example.accountservice.jobtitle.domain.JobTitle;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +16,7 @@ public record Contact(
         String email,
         ContactPriority priority,
         @With Account company,
-        @With JobTitle jobTitle,
+        UUID jobTitle,
         String phoneNumber,
         String privateEmail,
         String privatePhoneNumber,

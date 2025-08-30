@@ -8,7 +8,6 @@ import org.example.activityservice.activity.domain.ActivityStatus;
 import org.example.activityservice.activity.domain.ActivityType;
 import org.example.activityservice.activity.domain.EntityType;
 import org.example.activityservice.common.web.DtoMapper;
-import org.example.activityservice.user.web.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -32,7 +31,7 @@ public record ActivityDto(
         @NotNull(message = "Entity type required")
         Integer entityType,
         @NotNull(message = "Owner required")
-        UserDto owner
+        UUID owner
 ) {
     @Mapper
     public interface ActivityDtoMapper extends DtoMapper<Activity, ActivityDto> {

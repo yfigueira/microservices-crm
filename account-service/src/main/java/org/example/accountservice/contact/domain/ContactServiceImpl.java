@@ -3,7 +3,6 @@ package org.example.accountservice.contact.domain;
 import lombok.RequiredArgsConstructor;
 import org.example.accountservice.activity.domain.ActivityService;
 import org.example.accountservice.exception.AccountServiceException;
-import org.example.accountservice.jobtitle.domain.JobTitleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +14,6 @@ class ContactServiceImpl implements ContactService {
 
     private final ContactRepository repository;
     private final ActivityService activityService;
-    private final JobTitleService jobTitleService;
 
     @Override
     public Contact create(Contact contact) {
@@ -29,7 +27,6 @@ class ContactServiceImpl implements ContactService {
     public Contact getById(UUID id) {
         return repository.findById(id)
                 .map(this::fetchActivities)
-                .map(this::fetchJobTitle)
                 .orElseThrow(() -> AccountServiceException.notFound(Contact.class, id));
     }
 
@@ -54,10 +51,5 @@ class ContactServiceImpl implements ContactService {
     private Contact fetchActivities(Contact contact) {
         var activities = activityService.getByContact(contact.id());
         return contact.withActivities(activities);
-    }
-
-    private Contact fetchJobTitle(Contact contact) {
-        var jobTitle = jobTitleService.getById(contact.jobTitle().id());
-        return contact.withJobTitle(jobTitle);
     }
 }

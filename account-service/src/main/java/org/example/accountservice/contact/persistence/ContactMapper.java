@@ -3,11 +3,7 @@ package org.example.accountservice.contact.persistence;
 import org.example.accountservice.account.domain.Account;
 import org.example.accountservice.contact.domain.Contact;
 import org.example.accountservice.contact.domain.ContactPriority;
-import org.example.accountservice.jobtitle.domain.JobTitle;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -21,6 +17,7 @@ interface ContactMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     ContactEntity updateEntity(Contact contact, @MappingTarget ContactEntity entity);
 
     default ContactPriority mapContactPriority(Integer entity) {
@@ -34,19 +31,11 @@ interface ContactMapper {
         return domain.getCode();
     }
 
-    default JobTitle mapJobTitle(UUID entity) {
-        return JobTitle.builder().id(entity).build();
-    }
-
-    default UUID mapJobTitle(JobTitle domain) {
-        return domain.id();
-    }
-
     default Account mapAccount(UUID entity) {
-        return Account.builder().id(entity).build();
+        return entity == null ? null : Account.builder().id(entity).build();
     }
 
     default UUID mapAccount(Account domain) {
-        return domain.id();
+        return domain == null ? null : domain.id();
     }
 }

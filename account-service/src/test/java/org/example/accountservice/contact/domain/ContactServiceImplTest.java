@@ -3,8 +3,6 @@ package org.example.accountservice.contact.domain;
 import org.example.accountservice.activity.domain.Activity;
 import org.example.accountservice.activity.domain.ActivityService;
 import org.example.accountservice.exception.AccountServiceException;
-import org.example.accountservice.jobtitle.domain.JobTitle;
-import org.example.accountservice.jobtitle.domain.JobTitleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,9 +28,6 @@ class ContactServiceImplTest {
 
     @Mock
     ActivityService activityService;
-
-    @Mock
-    JobTitleService jobTitleService;
 
     @InjectMocks
     ContactServiceImpl SUT;
@@ -86,39 +81,28 @@ class ContactServiceImplTest {
     }
 
     @Test
-    void whenFound_ShouldReturnContactWithActivitiesAndJobTitle() {
+    void whenFound_ShouldReturnContactWithActivities() {
         // given
         var activities = List.of(
                 Activity.builder().subject("Activity 1").build(),
                 Activity.builder().subject("Activity 2").build()
         );
-
-        var jobTitleId = UUID.randomUUID();
-        var jobTitle = JobTitle.builder()
-                .id(jobTitleId)
-                .name("Job title")
-                .build();
-
         var contactId = UUID.randomUUID();
         var contact = Contact.builder()
                 .id(contactId)
                 .firstName("John")
                 .lastName("Smith")
                 .email("test@email.com")
-                .jobTitle(JobTitle.builder().id(jobTitleId).build())
+                .jobTitle(UUID.randomUUID())
                 .build();
 
         Mockito.when(activityService.getByContact(contactId)).thenReturn(activities);
-        Mockito.when(jobTitleService.getById(jobTitleId)).thenReturn(jobTitle);
         Mockito.when(repository.findById(contactId)).thenReturn(Optional.of(contact));
 
         // when
         var result = SUT.getById(contactId);
 
         // then
-        assertThat(result,
-                is(equalTo(contact
-                        .withActivities(activities)
-                        .withJobTitle(jobTitle))));
+        assertThat(result, is(equalTo(contact.withActivities(activities))));
     }
 }

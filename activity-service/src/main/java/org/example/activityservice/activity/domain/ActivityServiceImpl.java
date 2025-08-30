@@ -2,7 +2,6 @@ package org.example.activityservice.activity.domain;
 
 import lombok.RequiredArgsConstructor;
 import org.example.activityservice.exception.ActivityServiceException;
-import org.example.activityservice.user.domain.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.UUID;
 class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository repository;
-    private final UserService userService;
 
     @Override
     public Activity create(Activity activity) {
@@ -24,7 +22,6 @@ class ActivityServiceImpl implements ActivityService {
     @Override
     public Activity getById(UUID id) {
         return repository.findById(id)
-                .map(this::fetchOwner)
                 .orElseThrow(() -> ActivityServiceException.notFound(Activity.class, id));
     }
 
@@ -49,10 +46,5 @@ class ActivityServiceImpl implements ActivityService {
     @Override
     public List<Activity> getByEntity(UUID entityId) {
         return repository.findByEntity(entityId);
-    }
-
-    private Activity fetchOwner(Activity activity) {
-        var owner = userService.getOwner(activity.owner().id());
-        return activity.withOwner(owner);
     }
 }

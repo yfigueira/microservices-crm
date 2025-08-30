@@ -2,7 +2,6 @@ package org.example.activityservice.activity.domain;
 
 import lombok.Builder;
 import lombok.With;
-import org.example.activityservice.user.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,7 +17,7 @@ public record Activity(
         ActivityStatus status,
         UUID entity,
         EntityType entityType,
-        @With User owner,
+        UUID owner,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {

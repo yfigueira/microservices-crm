@@ -4,14 +4,9 @@ import org.example.activityservice.activity.domain.Activity;
 import org.example.activityservice.activity.domain.ActivityStatus;
 import org.example.activityservice.activity.domain.ActivityType;
 import org.example.activityservice.activity.domain.EntityType;
-import org.example.activityservice.user.domain.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 interface ActivityMapper {
@@ -22,6 +17,7 @@ interface ActivityMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     ActivityEntity updateEntity(Activity domain, @MappingTarget ActivityEntity entity);
 
     default ActivityStatus mapActivityStatus(Integer entity) {
@@ -55,13 +51,5 @@ interface ActivityMapper {
 
     default Integer mapEntityType(EntityType domain) {
         return domain.getCode();
-    }
-
-    default User mapOwner(UUID entity) {
-        return User.builder().id(entity).build();
-    }
-
-    default UUID mapOwner(User domain) {
-        return domain.id();
     }
 }

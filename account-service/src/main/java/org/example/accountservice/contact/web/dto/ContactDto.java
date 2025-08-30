@@ -7,10 +7,11 @@ import org.example.accountservice.account.domain.Account;
 import org.example.accountservice.activity.web.ActivityDto;
 import org.example.accountservice.common.web.DtoMapper;
 import org.example.accountservice.contact.domain.Contact;
-import org.example.accountservice.jobtitle.web.JobTitleDto;
+import org.example.accountservice.contact.domain.ContactPriority;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ public record ContactDto(
         String email,
         Integer priority,
         UUID company,
-        JobTitleDto jobTitle,
+        UUID jobTitle,
         String phoneNumber,
         String privateEmail,
         String privatePhoneNumber,
@@ -41,6 +42,17 @@ public record ContactDto(
 
         default UUID mapAccount(Account domain) {
             return domain.id();
+        }
+
+        default ContactPriority mapContactPriority(Integer dto) {
+            return Arrays.stream(ContactPriority.values())
+                    .filter(v -> v.getCode().equals(dto))
+                    .findFirst()
+                    .orElse(ContactPriority.LOW);
+        }
+
+        default Integer mapContactPriority(ContactPriority domain) {
+            return domain.getCode();
         }
     }
 

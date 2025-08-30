@@ -19,31 +19,18 @@
           <entry name="/home/yfigueira/.m2/repository/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
           <entry name="/home/yfigueira/.m2/repository/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
           <entry name="/home/yfigueira/.m2/repository/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
-          <entry name="/home/yfigueira/.m2/repository/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-          <entry name="/home/yfigueira/.m2/repository/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
-          <entry name="/home/yfigueira/.m2/repository/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
-        </processorPath>
-        <module name="user-service" />
-      </profile>
-      <profile name="Annotation profile for lead-service" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="/home/yfigueira/.m2/repository/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-          <entry name="/home/yfigueira/.m2/repository/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
-          <entry name="/home/yfigueira/.m2/repository/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
         </processorPath>
         <module name="lead-service" />
-        <module name="account-service" />
+        <module name="user-service" />
         <module name="activity-service" />
+        <module name="account-service" />
       </profile>
       <profile name="Annotation profile for deal-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="/home/yfigueira/.m2/repository/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+          <entry name="/home/yfigueira/.m2/repository/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="deal-service" />
       </profile>
