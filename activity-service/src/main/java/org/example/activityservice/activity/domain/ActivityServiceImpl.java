@@ -1,5 +1,6 @@
 package org.example.activityservice.activity.domain;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.activityservice.exception.ActivityServiceException;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,11 @@ class ActivityServiceImpl implements ActivityService {
     @Override
     public List<Activity> getByEntity(UUID entityId) {
         return repository.findByEntity(entityId);
+    }
+
+    @Override
+    @Transactional
+    public void changeEntity(UUID currentEntity, UUID targetEntity) {
+        repository.changeEntity(currentEntity, targetEntity);
     }
 }

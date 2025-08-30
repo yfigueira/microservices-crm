@@ -9,6 +9,14 @@ spring:
     hibernate:
       ddl-auto: none
 
+  kafka:
+    producer:
+      bootstrap-servers: microservices-crm-message-broker:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: qualifiedLead:org.example.leadservice.event.QualifiedLead
+
 eureka:
   client:
     service-url:

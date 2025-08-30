@@ -9,6 +9,24 @@ spring:
     hibernate:
       ddl-auto: none
 
+  kafka:
+    producer:
+      bootstrap-servers: microservices-crm-message-broker:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: contactFromLead:org.example.accountservice.event.ContactFromLead
+
+    consumer:
+      bootstrap-servers: microservices-crm-message-broker:9092
+      group-id: lead-qualified-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: qualifiedLead:org.example.accountservice.event.QualifiedLead
+
 eureka:
   client:
     service-url:

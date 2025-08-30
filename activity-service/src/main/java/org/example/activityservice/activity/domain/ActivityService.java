@@ -16,4 +16,6 @@ public interface ActivityService {
     void delete(UUID id);
 
     List<Activity> getByEntity(UUID entityId);
+
+    void changeEntity(UUID currentEntity, UUID targetEntity);
 }
