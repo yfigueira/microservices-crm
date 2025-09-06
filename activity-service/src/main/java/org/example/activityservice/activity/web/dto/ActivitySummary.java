@@ -2,10 +2,8 @@ package org.example.activityservice.activity.web.dto;
 
 import lombok.Builder;
 import org.example.activityservice.activity.domain.Activity;
-import org.example.activityservice.activity.domain.ActivityStatus;
 import org.example.activityservice.activity.domain.ActivityType;
 import org.example.activityservice.common.web.DtoMapper;
-import org.example.activityservice.activity.domain.EntityType;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -17,11 +15,10 @@ import java.util.UUID;
 public record ActivitySummary(
         UUID id,
         String subject,
-        LocalDateTime scheduledAt,
+        String description,
         Integer type,
-        Integer status,
-        Integer entityType
-) {
+        LocalDateTime scheduledAt
+        ) {
     @Mapper
     public interface ActivitySummaryMapper extends DtoMapper<Activity, ActivitySummary> {
 
@@ -33,28 +30,6 @@ public record ActivitySummary(
         }
 
         default Integer mapActivityType(ActivityType domain) {
-            return domain.getCode();
-        }
-
-        default ActivityStatus mapActivityStatus(Integer dto) {
-            return Arrays.stream(ActivityStatus.values())
-                    .filter(v -> v.getCode().equals(dto))
-                    .findFirst()
-                    .orElse(ActivityStatus.NOT_AVAILABLE);
-        }
-
-        default Integer mapActivityStatus(ActivityStatus domain) {
-            return domain.getCode();
-        }
-
-        default EntityType mapEntityType(Integer dto) {
-            return Arrays.stream(EntityType.values())
-                    .filter(v -> v.getCode().equals(dto))
-                    .findFirst()
-                    .orElse(EntityType.NOT_AVAILABLE);
-        }
-
-        default Integer mapEntityType(EntityType domain) {
             return domain.getCode();
         }
     }

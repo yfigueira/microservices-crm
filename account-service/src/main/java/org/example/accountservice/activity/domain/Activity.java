@@ -9,9 +9,8 @@ import java.util.UUID;
 public record Activity(
         UUID id,
         String subject,
-        LocalDateTime scheduledAt,
+        String description,
         Integer type,
-        Integer status,
-        Integer entityType
+        LocalDateTime scheduledAt
 ) {
 }

@@ -12,10 +12,9 @@ import java.util.UUID;
 public record ActivityDto(
         UUID id,
         String subject,
-        LocalDateTime scheduledAt,
+        String description,
         Integer type,
-        Integer Status,
-        Integer entityType
+        LocalDateTime scheduledAt
 ) {
     @Mapper
     public interface ActivityDtoMapper extends DtoMapper<Activity, ActivityDto> {}
