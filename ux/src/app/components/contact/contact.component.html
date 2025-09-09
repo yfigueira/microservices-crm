@@ -1,0 +1,66 @@
+<div class="app-contact-return-container" (click)="goBack()">
+  <fa-icon [icon]="faAngleLeft" />
+  <span>Return</span>
+</div>
+<div class="contact-details-container">
+  <div class="contact-management-actions-container">
+    <app-button name="save-contact"
+                text="Save"
+                [icon]="faFloppyDisk"
+                [style]="ButtonStyle.INFO"
+                (clickEvent)="updateContact()" />
+    <app-button name="remove-contact"
+                text="Remove"
+                [icon]="faTrashCan"
+                [style]="ButtonStyle.DANGER"
+                (clickEvent)="deleteContact()" />
+  </div>
+  <div class="contact-form-container">
+    <div>
+      <app-input id="first-name"
+                 label="First name"
+                 [(value)]="contact.firstName" />
+      <app-input id="last-name"
+                 label="Last name"
+                 [(value)]="contact.lastName" />
+      <app-input id="email"
+                 label="Email"
+                 [(value)]="contact.email" />
+      <app-input id="phone-number"
+                 label="Phone number"
+                 [(value)]="contact.phoneNumber" />
+    </div>
+    <div>
+      <div>
+        <app-select id="accounts"
+                    label="Company"
+                    [options]="getAccountsOptions()"
+                    [(value)]="contact.company" />
+        <p (click)="goToAccounts()">Create account</p>
+      </div>
+      <div>
+        <app-select id="job-titles"
+                    label="Job title"
+                    [options]="getJobTitlesOptions()"
+                    [(value)]="contact.jobTitle" />
+        <p (click)="openNewJobTitleModal()">Create job title</p>
+      </div>
+      <app-select id="contact-priorities"
+                  label="Priority"
+                  [options]="getContactPrioritiesOptions()"
+                  [(value)]="contact.priority" />
+    </div>
+    <div>
+      <app-input id="private-email"
+                 label="Private email"
+                 [(value)]="contact.privateEmail" />
+      <app-input id="private-phone-number"
+                 label="Private phone number"
+                 [(value)]="contact.privatePhoneNumber" />
+    </div>
+  </div>
+  <hr>
+  <div class="contact-activities-container">
+    <app-activities [activities]="contact.activities" [parent]="contact.id" />
+  </div>
+</div>
