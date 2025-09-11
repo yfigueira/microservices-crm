@@ -1,6 +1,6 @@
 import {HttpHeaders, HttpInterceptorFn} from '@angular/common/http';
 import {inject} from '@angular/core';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AuthenticationService} from '../../services/authentication/authentication.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(AuthenticationService).keycloak.token;

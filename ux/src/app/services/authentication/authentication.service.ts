@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Keycloak from 'keycloak-js';
-import {UserProfile} from '../models/authentication/user-profile';
+import {UserProfile} from '../../models/authentication/user-profile';
 
 @Injectable({
   providedIn: 'root'

@@ -47,4 +47,10 @@
         </createProcedure>
     </changeSet>
 
+    <changeSet id="3" author="yfp">
+        <addColumn tableName="lead">
+            <column name="subject" type="varchar" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
